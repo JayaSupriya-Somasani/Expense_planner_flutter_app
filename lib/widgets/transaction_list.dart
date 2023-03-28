@@ -3,19 +3,25 @@ import '../models/transaction.dart';
 import 'package:intl/intl.dart';
 
 class TransactionList extends StatelessWidget {
-  final List<Transaction> _userTransactions;
-  TransactionList(this._userTransactions);
+  final List<Transaction> _transactions;
+
+  TransactionList(this._transactions);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 300,
-        child: _userTransactions.isEmpty
-            ? Column(
-                children: [
-                   Text("No transactions added yet"),
-                  Image.asset('assets/images/bird.jpg')
-                ],
+        height: 400,
+        child: _transactions.isEmpty
+            ? Container(
+                height: 200,
+                child: Column(
+                  children: [
+                    SizedBox(height: 20,),
+                    Text("No transactions added yet"),
+                    SizedBox(height: 20,),
+                    Image.asset('assets/images/bird.jpg')
+                  ],
+                ),
               )
             : ListView.builder(
                 itemBuilder: (ctx, index) {
@@ -29,7 +35,7 @@ class TransactionList extends StatelessWidget {
                             border: Border.all(width: 2, color: Colors.purple)),
                         padding: const EdgeInsets.all(10),
                         child: Text(
-                          '\$ ${_userTransactions[index].amount.toStringAsFixed(2)}',
+                          '\$ ${_transactions[index].amount.toStringAsFixed(2)}',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
@@ -39,12 +45,12 @@ class TransactionList extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(_userTransactions[index].title,
+                          Text(_transactions[index].title,
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold)),
                           Text(
                             DateFormat()
-                                .format(_userTransactions[index].dateTime),
+                                .format(_transactions[index].dateTime),
                             style: const TextStyle(color: Colors.grey),
                           )
                         ],
@@ -52,7 +58,7 @@ class TransactionList extends StatelessWidget {
                     ],
                   ));
                 },
-                itemCount: _userTransactions.length,
+                itemCount: _transactions.length,
               ));
   }
 }
