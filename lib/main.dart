@@ -17,10 +17,20 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-          primarySwatch: Colors.purple, accentColor: Colors.amber,
-          primaryColor: Colors.red , textTheme: ThemeData.light().textTheme.copyWith(
-        button: const TextStyle(color: Colors.white)
-      )),
+          primarySwatch: Colors.purple,
+          accentColor: Colors.amber,
+          primaryColor: Colors.red,
+          textTheme: ThemeData
+              .light()
+              .textTheme
+              .copyWith(
+              button: const TextStyle(color: Colors.white),
+              caption: TextStyle(color: Colors.purple),
+            headline1: TextStyle(color: Colors.purple),
+            headline2: TextStyle(color: Colors.purple),
+            headline3: TextStyle(color: Colors.purple),
+            headline4: TextStyle(color: Colors.purple)
+          )),
       home: MyHomePage(),
     );
   }
@@ -34,12 +44,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _userTransactions = [];
 
-  void _addNewTransaction(String txTitile, double txAmount) {
+  void _addNewTransaction(String txTitile, double txAmount,DateTime choosenDate) {
     final newTx = Transaction(
         id: DateTime.now().toString(),
         title: txTitile,
         amount: txAmount,
-        dateTime: DateTime.now());
+        dateTime: choosenDate);
     setState(() {
       _userTransactions.add(newTx);
     });

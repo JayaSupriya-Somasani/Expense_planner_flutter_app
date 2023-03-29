@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addTx;
+
   NewTransaction(this.addTx);
 
   @override
@@ -10,18 +11,38 @@ class NewTransaction extends StatefulWidget {
 }
 
 class _NewTransactionState extends State<NewTransaction> {
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _amountController = TextEditingController();
+  DateTime? _selectedDate;
 
   void submitData(String val) {
-    final enteredTitle = titleController.text;
-    final enteredAmount = double.parse(amountController.text);
+    final enteredTitle = _titleController.text;
+    final enteredAmount = double.parse(_amountController.text);
 
-    if (enteredTitle.isEmpty || enteredAmount <= 0) {
+    if (enteredTitle.isEmpty || enteredAmount <= 0 || _selectedDate==null) {
       return;
     }
-    widget.addTx(titleController.text, double.parse(amountController.text));
+    widget.addTx(_titleController.text, double.parse(_amountController.text),_selectedDate);
     Navigator.of(context).pop();
+  }
+
+  void _presentDatePicker() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(1990),
+            lastDate: DateTime.now())
+        .then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      }
+      setState(() {
+        _selectedDate = pickedDate;
+      });
+
+      print("selected date $_selectedDate");
+      print(_selectedDate.runtimeType);
+    });
   }
 
   @override
@@ -34,28 +55,36 @@ class _NewTransactionState extends State<NewTransaction> {
           children: [
             TextField(
               decoration: const InputDecoration(label: Text('Title')),
-              controller: titleController,
+              controller: _titleController,
               onSubmitted: (_) => submitData,
             ),
             TextField(
               decoration: const InputDecoration(label: Text('Amount')),
-              controller: amountController,
+              controller: _amountController,
               keyboardType: TextInputType.number,
               onSubmitted: (_) => submitData,
             ),
             Container(
-              margin: EdgeInsets.symmetric(vertical: 10),
+              margin: EdgeInsets.symmetric(vertical: 20),
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
-                  const Text("No Date choosen !"),
+                  Expanded(
+                    child: Text(_selectedDate == null
+                        ? "No Date choosen !"
+                        : 'Selected Date: ${DateFormat.yMMMd().format(_selectedDate!)}',
+                    style: TextStyle(color: Theme.of(context).textTheme.headline4?.color,fontWeight: FontWeight.bold),),
+                  ),
                   TextButton(
-                      onPressed: () {},
+                      onPressed: _presentDatePicker,
                       // style: TextButton.styleFrom(textStyle: TextStyle(color: Theme.of(context).primaryColor)),
                       style: ButtonStyle(
-                             foregroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor)),
-                      child: const Text( "Choose Date", style: TextStyle(fontWeight: FontWeight.bold),)
-                  )
+                          foregroundColor: MaterialStateProperty.all(
+                              Theme.of(context).primaryColor)),
+                      child: const Text(
+                        "Choose Date",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ))
                 ],
               ),
             ),
@@ -63,9 +92,10 @@ class _NewTransactionState extends State<NewTransaction> {
                 onPressed: () {
                   submitData("Transaction added");
                 },
-                style: TextButton.styleFrom(textStyle: TextStyle(color: Theme.of(context).textTheme.button?.color)),
-                child: Text('Add transaction')
-                )
+                style: TextButton.styleFrom(
+                    textStyle: TextStyle(
+                        color: Theme.of(context).textTheme.button?.color)),
+                child: Text('Add transaction'))
           ],
         ),
       ),
