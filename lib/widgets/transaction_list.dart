@@ -10,19 +10,17 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 400,
-        child: _transactions.isEmpty
+    return _transactions.isEmpty
             ? Container(
                 height: 200,
                 child: Column(
                   children: [
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     const Text("No transactions added yet"),
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     Image.asset('assets/images/bird.jpg')
                   ],
@@ -58,6 +56,6 @@ class TransactionList extends StatelessWidget {
                   );
                 },
                 itemCount: _transactions.length,
-              ));
+              );
   }
 }

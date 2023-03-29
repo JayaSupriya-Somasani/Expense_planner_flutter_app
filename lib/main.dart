@@ -20,17 +20,10 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.purple,
           accentColor: Colors.amber,
           primaryColor: Colors.green,
-          textTheme: ThemeData
-              .light()
-              .textTheme
-              .copyWith(
+          textTheme: ThemeData.light().textTheme.copyWith(
               button: const TextStyle(color: Colors.white),
               caption: TextStyle(color: Colors.purple),
-            headline1: TextStyle(color: Colors.purple),
-            headline2: TextStyle(color: Colors.purple),
-            headline3: TextStyle(color: Colors.purple),
-            headline4: TextStyle(color: Colors.purple)
-          )),
+              headline4: TextStyle(color: Colors.purple))),
       home: MyHomePage(),
     );
   }
@@ -44,7 +37,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _userTransactions = [];
 
-  void _addNewTransaction(String txTitile, double txAmount,DateTime choosenDate) {
+  void _addNewTransaction(
+      String txTitile, double txAmount, DateTime choosenDate) {
     final newTx = Transaction(
         id: DateTime.now().toString(),
         title: txTitile,
@@ -65,9 +59,10 @@ class _MyHomePageState extends State<MyHomePage> {
               child: NewTransaction(_addNewTransaction));
         });
   }
-  void _deleteTransaction(String id){
+
+  void _deleteTransaction(String id) {
     setState(() {
-      _userTransactions.removeWhere((tx)=> tx.id==id);
+      _userTransactions.removeWhere((tx) => tx.id == id);
     });
   }
 
@@ -81,21 +76,32 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: const Text("Expense Planner"),
+      actions: [
+        IconButton(
+            onPressed: () => _startAddNewTransaction(context),
+            icon: Icon(Icons.add))
+      ],
+    );
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Expense Planner"),
-        actions: [
-          IconButton(
-              onPressed: () => _startAddNewTransaction(context),
-              icon: Icon(Icons.add))
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Chart(_recentTransactions),
-            TransactionList(_userTransactions,_deleteTransaction)
+            Container(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.3,
+                child: Chart(_recentTransactions)),
+            Container(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.7,
+                child: TransactionList(_userTransactions, _deleteTransaction))
           ],
         ),
       ),
