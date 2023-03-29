@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primarySwatch: Colors.purple,
           accentColor: Colors.amber,
-          primaryColor: Colors.red,
+          primaryColor: Colors.green,
           textTheme: ThemeData
               .light()
               .textTheme
@@ -65,6 +65,11 @@ class _MyHomePageState extends State<MyHomePage> {
               child: NewTransaction(_addNewTransaction));
         });
   }
+  void _deleteTransaction(String id){
+    setState(() {
+      _userTransactions.removeWhere((tx)=> tx.id==id);
+    });
+  }
 
   List<Transaction> get _recentTransactions {
     return _userTransactions.where((tx) {
@@ -90,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Chart(_recentTransactions),
-            TransactionList(_userTransactions)
+            TransactionList(_userTransactions,_deleteTransaction)
           ],
         ),
       ),
