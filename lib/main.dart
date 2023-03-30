@@ -75,6 +75,41 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
+  List<Widget> _buildLandScapeContent(MediaQueryData mediaQuery, AppBar appBar,Widget txListWidget){
+      return [Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("Show Switch",style: Theme.of(context).textTheme.titleSmall,),
+          Switch.adaptive(
+            activeColor: Theme.of(context).accentColor,
+            value: _showChart,
+            onChanged: (val) {
+              setState(() {
+                _showChart = val;
+              });
+            },
+          ),
+        ],
+      ),
+        _showChart
+            ? Container(
+            height: (mediaQuery.size.height -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top) *
+                0.7,
+            child: Chart(_recentTransactions))
+            : txListWidget];
+  }
+
+ List<Widget> _buildPortraitContent( MediaQueryData mediaQuery, AppBar appBar,Widget txListWidget){
+      return [Container(
+          height: (mediaQuery.size.height -
+              appBar.preferredSize.height -
+              mediaQuery.padding.top) *
+              0.3,
+          child: Chart(_recentTransactions)),txListWidget];
+  }
+
   bool _showChart = false;
 
   @override
@@ -114,40 +149,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (isLandScape)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Show Switch",style: Theme.of(context).textTheme.titleSmall,),
-                Switch.adaptive(
-                  activeColor: Theme.of(context).accentColor,
-                  value: _showChart,
-                  onChanged: (val) {
-                    setState(() {
-                      _showChart = val;
-                    });
-                  },
-                ),
-              ],
-            ),
-          if (!isLandScape)
-            Container(
-                height: (mediaQuery.size.height -
-                        appBar.preferredSize.height -
-                        mediaQuery.padding.top) *
-                    0.3,
-                child: Chart(_recentTransactions)),
-          if (!isLandScape) txListWidget,
-          if (isLandScape)
-            _showChart
-                ? Container(
-                    height: (mediaQuery.size.height -
-                            appBar.preferredSize.height -
-                            mediaQuery.padding.top) *
-                        0.7,
-                    child: Chart(_recentTransactions))
-                : txListWidget
+        children:<Widget> [
+          if (isLandScape) ..._buildLandScapeContent(mediaQuery,appBar as AppBar,txListWidget),
+          if (!isLandScape) ..._buildPortraitContent(mediaQuery,appBar as AppBar,txListWidget),
         ],
       ),
     ));
