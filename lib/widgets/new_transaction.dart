@@ -5,16 +5,43 @@ import '/widgets/adaptive_text_button.dart';
 class NewTransaction extends StatefulWidget {
   final Function addTx;
 
-  NewTransaction(this.addTx);
+  NewTransaction(this.addTx){
+    print("Constructor new transaction state is called");
+  }
+
 
   @override
-  State<NewTransaction> createState() => _NewTransactionState();
+  State<NewTransaction> createState() {
+    print("Create state is called");
+    return _NewTransactionState();
+  }
+
 }
 
 class _NewTransactionState extends State<NewTransaction> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
+
+  _NewTransactionState(){
+    print("Constructor new transaction state is called");
+  }
+
+  @override void initState(){
+    super.initState();
+    print("Init state is called");
+  }
+
+  @override
+  void didUpdateWidget(NewTransaction widget) {
+    print("didUpdateWidget is called");
+    super.didUpdateWidget(widget);
+  }
+
+  @override void dispose(){
+    print("Dispose is called");
+    super.dispose();
+  }
 
   void submitData(String val) {
     final enteredTitle = _titleController.text;
@@ -41,9 +68,6 @@ class _NewTransactionState extends State<NewTransaction> {
       setState(() {
         _selectedDate = pickedDate;
       });
-
-      print("selected date $_selectedDate");
-      print(_selectedDate.runtimeType);
     });
   }
 
