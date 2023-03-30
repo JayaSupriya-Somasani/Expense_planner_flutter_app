@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/transaction.dart';
-import 'package:intl/intl.dart';
+import './transaction_item.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> _transactions;
@@ -18,9 +18,7 @@ class TransactionList extends StatelessWidget {
                   height: 10,
                 ),
                 const Text("No transactions added yet"),
-                SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20,),
                 Container(
                     height: constraints.maxHeight * 0.6,
                     child: Image.asset('assets/images/bird.jpg'))
@@ -29,39 +27,7 @@ class TransactionList extends StatelessWidget {
           })
         : ListView.builder(
             itemBuilder: (ctx, index) {
-              return Card(
-                elevation: 6,
-                margin:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    radius: 30,
-                    child: FittedBox(
-                        child: Text('\$${_transactions[index].amount}')),
-                  ),
-                  title: Text(
-                    _transactions[index].title,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  subtitle: Text(
-                    DateFormat.yMMMd().format(_transactions[index].dateTime),
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  trailing: MediaQuery.of(context).size.width > 300
-                      ? TextButton.icon(
-                          icon: Icon(Icons.delete),
-                          label: Text("Delete"),
-                          onPressed: () =>
-                              _deleteTransaction(_transactions[index].id),
-                          style: ButtonStyle(foregroundColor: MaterialStateProperty.all(Theme.of(context).errorColor)),)
-                      : IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () =>
-                              _deleteTransaction(_transactions[index].id),
-                          color: Theme.of(context).errorColor,
-                        ),
-                ),
-              );
+              return TransactionItem(transactions: _transactions[index], deleteTransaction: _deleteTransaction,);
             },
             itemCount: _transactions.length,
           );
