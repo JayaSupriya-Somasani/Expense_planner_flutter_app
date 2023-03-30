@@ -12,24 +12,20 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return _transactions.isEmpty
         ? LayoutBuilder(builder: (context, constraints) {
-            return Column(
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                const Text("No transactions added yet"),
-                const SizedBox(height: 20,),
-                Container(
-                    height: constraints.maxHeight * 0.6,
-                    child: Image.asset('assets/images/bird.jpg'))
-              ],
-            );
-          })
-        : ListView.builder(
-            itemBuilder: (ctx, index) {
-              return TransactionItem(transactions: _transactions[index], deleteTransaction: _deleteTransaction,);
-            },
-            itemCount: _transactions.length,
+          return Column(mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+            const SizedBox(height: 10,),
+             Text("No transactions added yet",style: Theme.of(context).textTheme.titleSmall,),
+            const SizedBox(height: 20,),
+            Container(
+               height: constraints.maxHeight * 0.5,
+               child: Image.asset('assets/images/bird.jpg'))
+          ],
+        );
+        })
+        : ListView(children: _transactions.map((tx) => TransactionItem(
+            key:ValueKey(tx.id) ,transactions: tx,
+            deleteTransaction: _deleteTransaction,)).toList()
           );
   }
 }

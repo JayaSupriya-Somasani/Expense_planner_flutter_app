@@ -10,7 +10,7 @@ class AdaptiveTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme.of(context).platform == TargetPlatform.iOS
+    return Platform.isIOS
         ? CupertinoButton(
             onPressed: handler,
             child: Text(text, style: TextStyle(fontWeight: FontWeight.bold)),

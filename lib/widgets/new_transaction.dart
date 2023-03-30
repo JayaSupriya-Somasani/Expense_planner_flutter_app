@@ -44,6 +44,7 @@ class _NewTransactionState extends State<NewTransaction> {
   }
 
   void submitData(String val) {
+    if(_amountController.text.isEmpty){return;}
     final enteredTitle = _titleController.text;
     final enteredAmount = double.parse(_amountController.text);
 
@@ -88,7 +89,6 @@ class _NewTransactionState extends State<NewTransaction> {
               TextField(
                 decoration: const InputDecoration(label: Text('Title')),
                 controller: _titleController,
-                onSubmitted: (_) => submitData,
               ),
               TextField(
                 decoration: const InputDecoration(label: Text('Amount')),
